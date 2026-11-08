@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Petualangan Jukung</title>
+<style>
+:root{--ink:#2b3a55;--bg1:#7fd8f5;--bg2:#c9f3ff}
+*{box-sizing:border-box;margin:0;font-family:"Trebuchet MS","Segoe UI",Verdana,sans-serif}
+html,body{background:linear-gradient(#7fd8f5,#c9f3ff 55%,#bff0d4);color:var(--ink);min-height:100dvh;overflow-x:hidden}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--ink:#2b3a55}}
+.cloud{position:fixed;width:150px;height:44px;border-radius:44px;background:#fff;opacity:.9;animation:drift 70s linear infinite;z-index:0;box-shadow:0 6px 10px #0001}
+.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud:before{width:60px;height:60px;left:22px;top:-28px}.cloud:after{width:46px;height:46px;left:78px;top:-20px}
+@keyframes drift{from{transform:translateX(-220px)}to{transform:translateX(110vw)}}
+.scr{display:none;min-height:100dvh;padding:16px;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;position:relative;z-index:2}
+.scr.on{display:flex}
+h1{font-size:clamp(30px,7vw,64px);line-height:1;color:#fff;letter-spacing:1px;text-shadow:0 3px 0 #0e8a9c,0 6px 0 #0b6f80,0 14px 16px #0006}
+h2{font-size:clamp(20px,4vw,34px);color:#fff;text-shadow:0 3px 0 #0e8a9c,0 8px 10px #0005}
+.sub{font-size:clamp(15px,2.6vw,24px);font-weight:800;color:#fff;background:#ff8a3d;padding:6px 20px;border-radius:99px;box-shadow:0 4px 0 #c4561a}
+.btn{border:0;border-radius:999px;padding:12px 26px;font-size:clamp(16px,2.4vw,21px);font-weight:800;color:#fff;background:linear-gradient(#ffb347,#ff8a3d);box-shadow:0 6px 0 #c4561a,0 10px 16px #0003,inset 0 3px 0 #fff7;cursor:pointer;transition:transform .12s;text-shadow:0 2px 0 #0003}
+.btn:hover{transform:translateY(-2px) scale(1.06)}.btn:active{transform:translateY(5px) scale(.95);box-shadow:0 1px 0 #c4561a}
+.btn.b{background:linear-gradient(#4fd6e8,#19a5bb);box-shadow:0 6px 0 #0b6f80,0 10px 16px #0003,inset 0 3px 0 #fff7}
+.btn.g{background:linear-gradient(#8fe07a,#3fa84a);box-shadow:0 6px 0 #26702f,0 10px 16px #0003,inset 0 3px 0 #fff7}
+.btn.r{background:linear-gradient(#ff8a8a,#e0484f);box-shadow:0 6px 0 #9b2329,0 10px 16px #0003,inset 0 3px 0 #fff7}
+.btn.s{padding:7px 14px;font-size:15px}
+.btn[disabled]{filter:grayscale(1);opacity:.5;pointer-events:none}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.card{background:linear-gradient(#fff,#eefbff);border-radius:26px;padding:18px;box-shadow:0 8px 0 #9bdcea,0 16px 26px #0003;max-width:100%}
+.sc{width:min(780px,96vw);height:auto;border-radius:30px;box-shadow:0 8px 0 #0e8a9c,0 18px 28px #0004;background:linear-gradient(#8fe0ff,#e4faff)}
+#ctl{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:8px;z-index:50;display:flex;gap:6px}
+#ctl .btn{padding:6px 12px;font-size:18px}
+.bob{animation:bob 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes bob{0%,100%{transform:translateY(2px) rotate(-2deg)}50%{transform:translateY(-3px) rotate(2deg)}}
+.eyes{animation:blink 4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+.wave{transform-box:fill-box;transform-origin:50% 100%;animation:wv2 1.2s ease-in-out infinite}
+@keyframes wv2{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(28deg)}}
+.hop{animation:hop 2.2s ease-in-out infinite}
+@keyframes hop{0%,80%,100%{transform:translateY(0)}88%{transform:translateY(-8px)}}
+.wv{animation:wvm 4s linear infinite;fill:none;stroke:#fff9;stroke-width:3}
+@keyframes wvm{to{transform:translateX(-100px)}}
+.flow{animation:fl 1.2s linear infinite}@keyframes fl{to{stroke-dashoffset:-44}}
+.sway{transform-box:fill-box;transform-origin:50% 100%;animation:sw 3.5s ease-in-out infinite}
+@keyframes sw{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.flt{animation:fl2 3s ease-in-out infinite}@keyframes fl2{50%{transform:translate(4px,2px)}}
+.swing{transform-box:fill-box;transform-origin:50% 0;animation:sw 2.5s ease-in-out infinite}
+.fish{animation:fs 7s ease-in-out infinite alternate}@keyframes fs{to{transform:translateX(110px)}}
+.bird{animation:br 22s linear infinite}@keyframes br{from{transform:translateX(-60px)}to{transform:translateX(1080px)}}
+.spin{transform-box:fill-box;transform-origin:center;animation:sp 2s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.gone{animation:gone .7s forwards}@keyframes gone{to{opacity:0;transform:scale(.2) translateY(-30px)}}
+.foam{opacity:0}.mv .foam{opacity:.9;animation:fo .5s infinite}@keyframes fo{50%{transform:translateX(-4px)}}
+.rip{animation:rp 3s infinite;transform-box:fill-box;transform-origin:center;fill:none;stroke:#fff8}@keyframes rp{from{transform:scale(.3);opacity:1}to{transform:scale(1.4);opacity:0}}
+/* name */
+#nm{font-size:clamp(20px,4vw,30px);padding:12px 20px;border-radius:99px;border:4px solid #19b5c9;text-align:center;width:min(420px,86vw);outline:none;box-shadow:inset 0 4px 0 #0001;color:var(--ink);background:#fff}
+#nerr{color:#e0484f;font-weight:800;min-height:22px}
+/* char */
+.chars{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
+.pc{cursor:pointer;width:min(300px,86vw);position:relative;transition:.2s;border:5px solid transparent}
+.pc:hover{transform:translateY(-4px)}.pc.sel{border-color:#ffc93c;transform:scale(1.05);animation:pop .5s}
+.pc .tk{display:none;position:absolute;top:8px;right:10px;font-size:34px}.pc.sel .tk{display:block}
+@keyframes pop{40%{transform:scale(1.14)}}
+.pc h3{color:#0e8a9c;font-size:24px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;width:min(900px,96vw);text-align:left}
+.steps .card{padding:14px;font-size:16px;line-height:1.35}.steps b{display:block;font-size:19px;color:#e0701f}
+/* game */
+#game{padding:0;justify-content:flex-start;gap:0;height:100dvh;min-height:0}
+.hud{display:flex;flex-wrap:wrap;gap:8px;padding:8px 118px 6px 8px;align-items:center;justify-content:center;width:100%}
+.chip{background:#fff;border-radius:99px;padding:4px 14px;font-weight:800;box-shadow:0 3px 0 #9bdcea;font-size:clamp(13px,2.2vw,18px)}
+.pbar{flex:1;min-width:120px;max-width:260px;height:16px;background:#fff;border-radius:99px;box-shadow:0 3px 0 #9bdcea;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffc93c,#ff8a3d);border-radius:99px;transition:width .6s}
+#mz{flex:1;min-height:0;width:100%;display:block}
+#qp{display:none;width:min(900px,100%);max-height:48dvh;overflow:auto;margin:6px;padding:12px 16px;text-align:left}
+#qp .qn{color:#e0701f;font-weight:800}
+#qp .qt{font-size:clamp(16px,2.6vw,22px);font-weight:700;margin:4px 0 10px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:620px){.opts{grid-template-columns:1fr}}
+.opt{display:flex;gap:10px;align-items:center;text-align:left;border:0;border-radius:18px;padding:9px 12px;font-size:clamp(14px,2.2vw,18px);font-weight:700;background:linear-gradient(#fff,#e6f7fb);color:var(--ink);box-shadow:0 5px 0 #9bdcea,0 6px 10px #0002;cursor:pointer;transition:transform .1s}
+.opt:hover{transform:translateY(-2px)}.opt:active{transform:translateY(3px)}
+.opt i{flex:none;width:30px;height:30px;border-radius:50%;background:#19b5c9;color:#fff;display:grid;place-items:center;font-style:normal}
+.opt.ok{background:linear-gradient(#b8f2a8,#6fd35c);box-shadow:0 5px 0 #3b8a2e}.opt.no{background:linear-gradient(#ffd0d0,#ff9c9c);box-shadow:0 5px 0 #c4565a;animation:shake .4s;pointer-events:none}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+#fb{margin-top:10px;font-weight:700;line-height:1.35;display:none;padding:10px 12px;border-radius:14px}
+#fb.ok{display:block;background:#e3f9dc}#fb.no{display:block;background:#fff1d6}
+.ov{position:fixed;inset:0;background:#0b3d4d99;z-index:60;display:none;align-items:center;justify-content:center;padding:16px}
+.ov.on{display:flex}.ov .card{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center;max-width:460px}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:70;overflow:hidden}
+#fx span{position:absolute;top:-30px;font-size:28px;animation:fall 2s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+/* result */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;width:min(860px,96vw)}
+.st{border-radius:22px;padding:12px;color:#fff;font-weight:800;box-shadow:0 6px 0 #0003,0 12px 18px #0003;text-shadow:0 2px 0 #0003}
+.st big{display:block;font-size:clamp(22px,4vw,34px)}.st em{font-style:normal;font-size:30px;display:block}
+.ring{width:130px;height:130px;border-radius:50%;display:grid;place-items:center;margin:auto;box-shadow:0 6px 0 #0003}
+.ring b{background:#fff;color:var(--ink);width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font-size:26px;text-shadow:none}
+
+.d3{filter:drop-shadow(0 4px 2px #0003)}
+.card{border:3px solid #fff;background:linear-gradient(160deg,#fff,#e4f8ff 70%,#cdeffa);position:relative}
+.card:before{content:"";position:absolute;left:16px;right:16px;top:6px;height:12px;border-radius:99px;background:linear-gradient(#fffb,#fff0);pointer-events:none}
+.btn{position:relative}.btn:after{content:"";position:absolute;left:12%;right:12%;top:4px;height:38%;border-radius:99px;background:linear-gradient(#fff9,#fff0);pointer-events:none}
+.sc{border:5px solid #fff}.pc svg{filter:drop-shadow(0 6px 3px #0003)}
+h1{animation:tt 3s ease-in-out infinite}@keyframes tt{50%{transform:translateY(-5px) rotate(-1deg)}}
+.kidb{transform-box:fill-box;transform-origin:50% 100%}.mv .kidb{animation:row .8s ease-in-out infinite}
+@keyframes row{50%{transform:rotate(4deg) translateX(1px)}}
+.wave{transform-origin:0 100%}
+.dl{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}.dl span{padding:4px 10px;border-radius:99px;font-size:13px;font-weight:700}.dl .o{background:#d9f7cf}.dl .w{background:#ffe7b8}
+.tw{overflow-x:auto;width:min(960px,96vw);padding:10px}table{border-collapse:separate;border-spacing:0 4px;width:100%;font-size:clamp(12px,2vw,15px)}th{background:#19b5c9;color:#fff;padding:6px;white-space:nowrap}td{padding:6px;background:#fff;white-space:nowrap}tr{cursor:pointer}tr.sl td{background:#fff3c4}
+</style></head><body>
+<div class="cloud" style="top:6%;animation-delay:-10s"></div><div class="cloud" style="top:16%;animation-delay:-45s;transform:scale(.7)"></div><div class="cloud" style="top:30%;animation-delay:-30s;transform:scale(.5)"></div>
+<svg width="0" height="0" style="position:absolute"><defs>
+<radialGradient id="skin" cx=".4" cy=".35"><stop offset="0" stop-color="#ffe2c4"/><stop offset="1" stop-color="#f2b384"/></radialGradient>
+<linearGradient id="wat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fe3f2"/><stop offset="1" stop-color="#19a5c9"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3a05a"/><stop offset="1" stop-color="#9a5a25"/></linearGradient>
+<radialGradient id="leaf" cx=".35" cy=".3"><stop offset="0" stop-color="#9be86a"/><stop offset="1" stop-color="#3f9a3f"/></radialGradient>
+<radialGradient id="rock" cx=".35" cy=".3"><stop offset="0" stop-color="#cfd6dc"/><stop offset="1" stop-color="#6c7882"/></radialGradient>
+<linearGradient id="grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b6ec8a"/><stop offset="1" stop-color="#78c96a"/></linearGradient>
+<pattern id="sas" width="26" height="22" patternUnits="userSpaceOnUse"><rect width="26" height="22" fill="#f7b731"/><path d="M0,6 Q6.5,-2 13,6 T26,6" stroke="#d62828" stroke-width="3" fill="none"/><path d="M0,18 Q6.5,10 13,18 T26,18" stroke="#1b7f4b" stroke-width="3" fill="none"/><path d="M13,9 l3,3 l-3,3 l-3,-3z" fill="#fff"/></pattern>
+<pattern id="sasg" width="26" height="22" patternUnits="userSpaceOnUse"><rect width="26" height="22" fill="#ec4d8a"/><path d="M0,6 Q6.5,-2 13,6 T26,6" stroke="#ffe66d" stroke-width="3" fill="none"/><path d="M0,18 Q6.5,10 13,18 T26,18" stroke="#fff" stroke-width="2.5" fill="none"/><path d="M13,9 l3,3 l-3,3 l-3,-3z" fill="#7b2cbf"/></pattern>
+<pattern id="sasr" width="20" height="16" patternUnits="userSpaceOnUse"><rect width="20" height="16" fill="#c1121f"/><path d="M0,5 Q5,-1 10,5 T20,5" stroke="#ffd166" stroke-width="2.5" fill="none"/><path d="M0,14 Q5,8 10,14 T20,14" stroke="#fff" stroke-width="2" fill="none"/></pattern>
+<linearGradient id="shade" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".32"/></linearGradient>
+<radialGradient id="bekB" cx=".4" cy=".35"><stop offset="0" stop-color="#f2e3c6"/><stop offset="1" stop-color="#b9a07a"/></radialGradient>
+</defs></svg>
+<div id="ctl"><button class="btn b" id="bs" onclick="tSnd()" title="Suara">🔊</button><button class="btn b" id="bm" onclick="tMus()" title="Musik">🎵</button></div>
+<div id="fx"></div>
+
+<section class="scr on" id="home">
+<h1>PETUALANGAN<br>JUKUNG</h1><div class="sub">Misi Menuju Pasar Terapung Lok Baintan</div>
+<div id="hs"></div>
+<div class="row"><button class="btn g" onclick="initAudio();go('name')">▶ MULAI PETUALANGAN</button><button class="btn b" onclick="go('help')">❓ PETUNJUK</button><button class="btn" onclick="showRekap()">👩‍🏫 REKAP GURU</button></div>
+</section>
+
+<section class="scr" id="name">
+<h2>Siapa Nama Petualang Hari Ini?</h2><div id="ns"></div>
+<input id="nm" maxlength="20" placeholder="Tulis namamu..." autocomplete="off">
+<div id="nerr"></div>
+<div class="row"><button class="btn b" onclick="back()">⬅ KEMBALI</button><button class="btn g" onclick="nameNext()">SELANJUTNYA ➡</button></div>
+</section>
+
+<section class="scr" id="char">
+<h2>Pilih Karakter Petualangmu</h2>
+<div class="chars" id="chs"></div>
+<div class="row"><button class="btn b" onclick="back()">⬅ KEMBALI</button><button class="btn g" id="cn" disabled onclick="go('help')">PILIH KARAKTER ✔ SELANJUTNYA ➡</button></div>
+</section>
+
+<section class="scr" id="help">
+<h2>Cara Bermain</h2>
+<div class="steps">
+<div class="card"><b>🛶 1. Jukung berjalan</b>Jukungmu berlayar dari START menuju FINISH di Pasar Terapung Lok Baintan.</div>
+<div class="card"><b>🚧 2. 20 Rintangan</b>Ada 20 rintangan di sungai. Setiap rintangan punya satu soal pilihan ganda.</div>
+<div class="card"><b>✅ 3. Jawaban benar</b>Jukung melanjutkan perjalanan dan kamu mendapat skor.</div>
+<div class="card"><b>🔁 4. Jawaban salah</b>Jukung tetap berhenti. Baca penjelasannya, lalu jawab lagi sampai benar.</div>
+<div class="card"><b>⭐ 5. Skor</b>Benar langsung = 10 poin. Benar setelah mencoba lagi = 5 poin.</div>
+<div class="card"><b>⏸ 6. Jeda</b>Tekan PAUSE untuk berhenti sebentar. Waktu ikut berhenti.</div>
+</div>
+<div class="row"><button class="btn b" onclick="back()">⬅ KEMBALI</button><button class="btn g" onclick="helpStart()">🚣 MULAI BERMAIN</button></div>
+</section>
+
+<section class="scr" id="game">
+<div class="hud"><span class="chip" id="hn"></span><span class="chip" id="hs2">⭐ 0</span><span class="chip" id="ht">⏱ 00:00</span><span class="chip" id="hr">🚧 0/20</span><div class="pbar"><i id="pb"></i></div><button class="btn r s" onclick="pause(true)">⏸ PAUSE</button></div>
+<svg id="mz" viewBox="0 0 1000 580" preserveAspectRatio="xMidYMid meet"></svg>
+<div class="card" id="qp"></div>
+</section>
+
+<div class="ov" id="pz"><div class="card"><h2 style="color:#0e8a9c;text-shadow:none">⏸ Permainan Dijeda</h2><button class="btn g" onclick="pause(false)">▶ LANJUTKAN</button><button class="btn b" onclick="pause(false);startGame()">🔄 ULANGI</button><button class="btn r" onclick="pause(false);home()">🏠 HOME</button></div></div>
+<div class="ov" id="fin"><div class="card"><h2 style="color:#e0701f;text-shadow:none">🎉 FINISH! 🎉</h2><p style="font-weight:700">Kamu tiba di Pasar Terapung Lok Baintan! Para pedagang menyambutmu.</p><button class="btn g" onclick="showResult()">🏆 LIHAT HASIL</button></div></div>
+
+<section class="scr" id="result">
+<h2>Dashboard Hasil Belajar</h2>
+<div class="card" style="font-size:clamp(16px,2.6vw,22px);font-weight:800" id="rmsg"></div>
+<div class="stats" id="rst"></div>
+<div class="card" style="width:min(860px,96vw)"><b>📋 Rincian per Rintangan</b><div id="rdet"></div></div>
+<div class="row"><button class="btn g" onclick="startGame()">🔄 MAIN LAGI</button><button class="btn b" onclick="showRekap()">👩‍🏫 REKAP GURU</button><button class="btn" onclick="home()">🏠 HOME</button></div>
+</section>
+<section class="scr" id="rekap"><h2>👩‍🏫 Rekap Hasil Siswa</h2>
+<div class="card tw" id="rkt"></div><div class="card" id="rkd" style="width:min(960px,96vw)"></div>
+<p style="font-size:13px;font-weight:700;color:#0b6f80;max-width:560px">Data tersimpan di browser perangkat ini. Nilai = skor ÷ 200 × 100. Klik baris untuk melihat rincian per rintangan.</p>
+<textarea id="rkc" style="display:none;width:min(700px,94vw);height:120px"></textarea>
+<div class="row"><button class="btn b" onclick="back()">⬅ KEMBALI</button><button class="btn g" onclick="copyRek()">📋 SALIN REKAP</button><button class="btn r" id="rkx" onclick="delRek()">🗑 HAPUS DATA</button></div></section>
+
+<script>
+const $=s=>document.querySelector(s),esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const S={name:'',char:'',snd:true,mus:true};let G=null;
+/* ---------- SOAL (jawaban benar selalu indeks 0, diacak saat tampil) ---------- */
+const QS=[
+["Pak Hasan memanen padi, lalu menggilingnya menjadi beras. Mengapa kegiatan menggiling itu disebut produksi?",["Karena menghasilkan barang baru yang siap dipakai","Karena memindahkan padi ke tempat yang jauh","Karena memakai beras untuk kebutuhan keluarga","Karena menukar padi dengan uang di pasar"],"Tanyakan: apakah ada barang baru yang dihasilkan? Bedakan dari kegiatan memindahkan dan memakai barang.|Padi diolah menjadi beras, jadi ada barang yang dihasilkan. Itu produksi."],
+["Ibu Rahmah mengangkut 30 ikat sayur dengan jukung dari kebun ke Pasar Terapung Lok Baintan. Kegiatan Ibu Rahmah paling tepat digambarkan sebagai ...",["menyalurkan sayur dari penghasil ke calon pembeli","menghasilkan sayur baru dari bahan mentah di kebun","memakai sayur itu untuk memenuhi kebutuhan keluarga","menyimpan sayur di rumah agar tidak dijual lagi"],"Perhatikan arah barang: dari mana ke mana? Barang bergerak dari penghasil menuju calon pembeli.|Membawa sayur ke pasar berarti menyalurkan barang. Itu distribusi."],
+["Nanang membeli tiga pisang dari pedagang jukung. Satu pisang ia makan, dua pisang dibawa pulang untuk ibunya. Saat memakan satu pisang itu, Nanang melakukan ...",["konsumsi, karena ia memakai barang untuk kebutuhannya","produksi, karena ia menghasilkan pisang dari kebun","distribusi, karena ia memindahkan pisang ke pembeli","produksi, karena pisang berubah menjadi makanan lain"],"Tanyakan: apa yang Nanang lakukan pada pisang itu, memakai, membuat, atau memindahkan?|Nanang memakan pisang untuk memenuhi kebutuhannya. Itu konsumsi."],
+["Tiga kegiatan terjadi pada kain sasirangan: (1) Galuh memakai kain itu, (2) pengrajin mewarnai kain itu, (3) pedagang menjual kain itu. Urutan kegiatan yang benar adalah ...",["2 – 3 – 1","3 – 2 – 1","1 – 3 – 2","2 – 1 – 3"],"Cari dulu siapa yang membuat kain, lalu siapa yang menyalurkannya, terakhir siapa yang memakainya.|Urutannya produksi (2), distribusi (3), konsumsi (1), yaitu 2 – 3 – 1."],
+["Di Pasar Terapung ada petani jeruk, pedagang jeruk, pembeli jeruk, dan pengrajin jukung. Siapa yang berperan sebagai produsen jeruk?",["Petani yang menanam jeruk","Pedagang yang menjual jeruk","Pembeli yang membeli jeruk","Pengrajin yang membuat jukung"],"Produsen adalah orang yang menghasilkan barang. Siapa yang membuat jeruk itu ada?|Petani menanam jeruk sehingga jeruk ada. Pengrajin jukung menghasilkan jukung, bukan jeruk."],
+["Sungai meluap karena hujan deras, sehingga jukung pengangkut sayur tidak bisa berlayar selama tiga hari. Kegiatan ekonomi yang paling langsung terganggu adalah ...",["distribusi, karena sayur sulit sampai ke pasar","produksi, karena sayur otomatis berhenti tumbuh","konsumsi, karena pembeli tidak lagi butuh sayur","produksi, karena petani dilarang memanen sayur"],"Jukung tidak bisa berlayar. Apa yang sulit dilakukan: menghasilkan, memindahkan, atau memakai barang?|Yang terganggu langsung adalah memindahkan sayur ke pasar, yaitu distribusi."],
+["Pak Amat membayar ongkos untuk naik jukung wisata keliling Pasar Terapung. Peran Pak Amat dalam kegiatan ini adalah ...",["konsumen, karena ia memakai jasa angkutan","produsen, karena ia membuat jasa angkutan","pedagang, karena ia menjual jasa angkutan","pengrajin, karena ia membuat jukung wisata"],"Siapa yang membayar dan memakai jasa? Orang itu bukan yang menyediakan jasa.|Pak Amat membayar dan memakai jasa jukung wisata, jadi ia konsumen."],
+["Manakah daftar yang semuanya contoh kegiatan produksi?",["menjahit baju, menangkap ikan, membuat kue","menjual ikan, membuat kue, menangkap ikan","menangkap ikan, mengangkut sayur, menjahit baju","membuat kue, membeli baju, menjahit baju"],"Produksi berarti membuat atau menghasilkan barang. Periksa kegiatan satu per satu dalam tiap daftar.|Hanya daftar pertama yang semua kegiatannya membuat atau menghasilkan sesuatu."],
+["Manakah daftar yang semuanya contoh kegiatan distribusi?",["mengangkut sayur, menjual ikan, mengantar paket","mengangkut sayur, memasak ikan, mengantar paket","menjual ikan, menanam padi, mengantar paket","mengantar paket, membeli ikan, mengangkut sayur"],"Distribusi berarti menyalurkan barang. Coret kegiatan yang membuat atau memakai barang.|Hanya daftar pertama yang semua kegiatannya menyalurkan barang."],
+["Jeruk yang dihasilkan petani hanya sedikit, padahal pembeli di pasar sangat banyak. Hal yang paling mungkin terjadi adalah ...",["jeruk sulit didapat dan harganya cenderung naik","jeruk menumpuk dan harganya cenderung turun","jeruk tidak perlu lagi disalurkan ke pasar","pembeli otomatis berhenti membutuhkan jeruk"],"Bandingkan jumlah barang dengan jumlah pembeli. Barang sedikit, peminat banyak.|Banyak pembeli berebut sedikit jeruk, jadi jeruk sulit didapat dan harganya cenderung naik."],
+["Bu Siti pengrajin anyaman purun. Ia ingin anyamannya sampai ke tangan wisatawan. Langkah yang paling tepat adalah ...",["menitipkan anyaman pada pedagang di Pasar Terapung","menambah persediaan purun di rumahnya sendiri","memakai anyaman itu sendiri setiap hari","menyimpan anyaman agar tidak dilihat orang"],"Anyaman sudah jadi. Apa yang masih kurang supaya sampai ke pembeli?|Barang perlu disalurkan lewat penjualan, misalnya dititipkan pada pedagang di pasar."],
+["Pak Rudi menanam cabai, lalu menjualnya sendiri di jukung. Sebagian cabai ia sisihkan untuk memasak di rumah. Kegiatan Pak Rudi yang termasuk konsumsi adalah ...",["memasak cabai yang disisihkan untuk keluarga","menanam cabai di ladang miliknya","menjual cabai di atas jukung","mengayuh jukung menuju pasar"],"Konsumsi artinya memakai barang. Mana kegiatan Pak Rudi yang memakai cabai, bukan menghasilkan atau menjual?|Memasak cabai untuk keluarga berarti memakai barang. Itu konsumsi."],
+["Kayu ulin dibuat pengrajin menjadi jukung. Mengapa jukung lebih berguna bagi masyarakat sungai daripada kayu mentah?",["Karena sudah diolah sehingga dapat dipakai mengangkut","Karena kayu mentah tidak boleh dijual kepada siapa pun","Karena jukung dikonsumsi langsung tanpa perlu diolah","Karena jukung hanya dipakai oleh pedagang yang besar"],"Bandingkan kayu mentah dan jukung: apa yang berubah, dan apa gunanya?|Pengrajin mengolah kayu menjadi alat angkut, sehingga barang menjadi lebih berguna."],
+["Seorang siswa berkata, 'Pedagang tidak penting, petani bisa menjual sendiri.' Alasan yang paling tepat untuk membantahnya adalah ...",["pedagang membantu barang sampai ke pembeli yang jauh","pedagang membuat sayur tumbuh lebih cepat di kebun","pedagang membuat petani tidak perlu menanam lagi","pedagang membuat pembeli tidak perlu membayar"],"Bayangkan pembeli yang rumahnya jauh dari kebun petani. Siapa yang menghubungkan mereka?|Pedagang menyalurkan barang ke pembeli yang sulit menjangkau petani, jadi pedagang penting."],
+["Catatan Pasar: nelayan menangkap 50 ekor ikan haruan, pedagang membawa 50 ekor ke pasar, dan pembeli memasak 30 ekor. Kegiatan konsumsi pada catatan itu adalah ...",["pembeli memasak 30 ekor ikan","nelayan menangkap 50 ekor ikan","pedagang membawa 50 ekor ikan","pedagang menawarkan ikan kepada pembeli"],"Cari kegiatan yang berarti memakai barang, bukan membuat atau memindahkannya.|Pembeli memasak ikan untuk dimakan. Itu konsumsi."],
+["Jika banyak orang berhenti membeli anyaman purun, apa yang paling mungkin terjadi pada pengrajinnya?",["pesanan berkurang sehingga anyaman dibuat lebih sedikit","pesanan bertambah sehingga anyaman dibuat lebih banyak","anyaman tidak perlu lagi dijual ke pedagang","pengrajin otomatis menjadi pembeli anyaman"],"Urutkan akibatnya: pembeli berkurang, lalu penjualan, lalu pembuatan barang.|Pembeli berkurang, pesanan turun, sehingga pengrajin membuat lebih sedikit anyaman."],
+["Manakah kegiatan yang BUKAN contoh distribusi?",["petani memanen jeruk di kebun","pedagang mengantar jeruk memakai jukung","kurir membawa pesanan jeruk ke rumah","pedagang menjual jeruk di Pasar Terapung"],"Kata BUKAN artinya cari yang berbeda sendiri. Tentukan apakah tiap kegiatan menyalurkan jeruk.|Memanen jeruk adalah menghasilkan barang (produksi). Tiga kegiatan lain menyalurkan jeruk."],
+["Petani menghasilkan 60 ikat kangkung. Pedagang membeli 50 ikat untuk dijual di pasar, dan 10 ikat dibawa pulang petani untuk dimasak. Pembagian yang benar adalah ...",["distribusi 50 ikat, konsumsi 10 ikat","distribusi 10 ikat, konsumsi 50 ikat","distribusi 60 ikat, konsumsi 0 ikat","distribusi 0 ikat, konsumsi 60 ikat"],"Bagi menjadi dua: yang dibawa pedagang untuk dijual dan yang dibawa pulang untuk dimasak.|50 ikat disalurkan ke pasar (distribusi) dan 10 ikat dimasak keluarga (konsumsi)."],
+["Manakah pernyataan yang paling benar tentang produksi, distribusi, dan konsumsi?",["Ketiganya saling berkaitan sebagai satu rantai kegiatan","Ketiganya berdiri sendiri dan tidak saling memengaruhi","Konsumsi selalu terjadi lebih dulu sebelum produksi","Distribusi tidak diperlukan jika barang sudah dibuat"],"Ingat contoh beras: ditanam, dijual, lalu dimasak. Apakah satu kegiatan memengaruhi yang lain?|Ketiganya saling berkaitan, sehingga membentuk satu rantai kegiatan ekonomi."],
+["Pasar Terapung sering sepi karena jukung pengangkut barang terlambat tiba. Usul yang paling tepat untuk memperbaikinya adalah ...",["menambah jukung dan mengatur jadwal pengangkutan","mengajak petani menanam jenis sayur yang baru","meminta pembeli membeli barang lebih banyak","membuat jukung dengan ukuran yang lebih kecil"],"Masalahnya ada pada jukung yang terlambat. Pilih usul yang memperbaiki pengangkutan barang.|Menambah jukung dan mengatur jadwal melancarkan distribusi, sehingga barang cepat sampai."]
+];
+/* ---------- ILUSTRASI SVG ---------- */
+const kid=t=>{const g=t=='n',f=g?'sas':'sasg',E=x=>`<ellipse cx="${x}" cy="-54" rx="3" ry="2.4" fill="#fff"/><circle cx="${x}" cy="-54" r="1.8" fill="#3b2416"/><circle cx="${x+.6}" cy="-54.6" r=".7" fill="#fff"/>`;
+const T="M-15,-34 Q-16,-44 -9,-45 L9,-45 Q16,-44 15,-34 L16,0 L-16,0Z";
+return `<g transform="translate(0,-10)"><g class="kidb">
+${g?'':'<path d="M-13,-58 Q-21,-30 -16,-10 Q-7,-14 -10,-36Z" fill="#241711"/>'}
+<rect x="-4.5" y="-50" width="9" height="9" rx="3" fill="#e5a272"/>
+<path d="${T}" fill="url(#${f})" stroke="#0004" stroke-width="1"/><path d="${T}" fill="url(#shade)"/>
+${g?'<path d="M-7,-45 L0,-34 L7,-45Z" fill="#fff3d6" stroke="#0003" stroke-width=".8"/><circle cx="0" cy="-27" r="1.4" fill="#5a3a1a"/><circle cx="0" cy="-19" r="1.4" fill="#5a3a1a"/>':'<path d="M-14,-44 L16,-8 L16,0 L9,0 L-16,-34Z" fill="url(#sas)" stroke="#0003" stroke-width=".8"/><path d="M-7,-45 Q0,-37 7,-45Z" fill="#e5a272"/>'}
+<path d="M-15,-42 Q-25,-30 -21,-21" stroke="url(#${f})" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M-21,-21 Q-21,-14 -15,-12" stroke="#e5a272" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+<g class="wave"><path d="M15,-42 Q27,-41 29,-52" stroke="url(#${f})" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M29,-52 L31,-63" stroke="#e5a272" stroke-width="5.5" fill="none" stroke-linecap="round"/><circle cx="31" cy="-66" r="4" fill="#f0b185"/></g>
+<circle cx="-12.5" cy="-54" r="3.2" fill="#e5a272"/><circle cx="12.5" cy="-54" r="3.2" fill="#e5a272"/>
+<ellipse cx="0" cy="-55" rx="12" ry="13.5" fill="url(#skin)"/>
+${g?'<path d="M-13,-56 Q-14,-72 0,-71 Q14,-72 13,-56 Q10,-62 3,-63 Q-6,-62 -13,-56Z" fill="#241711"/><path d="M-13.5,-62 Q0,-69 13.5,-62 L13,-57 Q0,-63 -13,-57Z" fill="url(#sasr)" stroke="#0003" stroke-width=".8"/><path d="M12,-61 L21,-66 L19,-56Z" fill="url(#sasr)" stroke="#0003" stroke-width=".8"/>':'<path d="M-13,-55 Q-15,-73 0,-72 Q15,-73 13,-55 Q9,-64 0,-64 Q-9,-64 -13,-55Z" fill="#241711"/><circle cx="0" cy="-76" r="6" fill="#241711"/><circle cx="-4" cy="-77" r="2.2" fill="#fff"/><circle cx="4" cy="-77" r="2.2" fill="#fff"/><circle cx="0" cy="-79" r="2.2" fill="#fff"/><path d="M13,-50 Q22,-38 15,-24" stroke="#241711" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="15" cy="-24" r="2.5" fill="#e0484f"/>'}
+<path d="M-8,-59 q3,-2 6,0 M2,-59 q3,-2 6,0" stroke="#241711" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+<g class="eyes">${E(-5)}${E(5)}</g>
+<path d="M0,-52 q2,3 0,4" stroke="#c9825a" fill="none" stroke-width="1.2" stroke-linecap="round"/>
+<circle cx="-8.5" cy="-48" r="3" fill="#ff8a8a" opacity=".3"/><circle cx="8.5" cy="-48" r="3" fill="#ff8a8a" opacity=".3"/>
+<path d="M-4,-47 Q0,-44 4,-47" stroke="#8a3a3a" stroke-width="1.6" fill="none" stroke-linecap="round"/></g></g>`};
+const boat=t=>`<g class="bob">${kid(t)}<path d="M-62,-6 Q-74,-14 -66,-21 L66,-21 Q74,-14 62,-6 Q0,17 -62,-6Z" fill="url(#wood)" stroke="#6b3a17" stroke-width="2"/>
+<path d="M-62,-16 L62,-16" stroke="#e0484f" stroke-width="3" opacity=".85"/><path d="M-54,-19 Q0,-12 54,-19" stroke="#ffe3b5" stroke-width="3" fill="none" opacity=".7"/><path d="M-56,-5 Q0,12 56,-5" stroke="#6b3a17" stroke-width="2" fill="none" opacity=".35"/>
+<ellipse class="foam" cx="-74" cy="2" rx="9" ry="3" fill="#fff"/><ellipse class="foam" cx="74" cy="2" rx="9" ry="3" fill="#fff"/></g>`;
+const bek=(x,y,s)=>`<g class="d3" transform="translate(${x},${y}) scale(${s})"><g class="swing"><path d="M12,16 Q46,18 40,-18 Q38,-30 28,-32" stroke="#d9c7a8" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="-8" cy="32" rx="7" ry="10" fill="#b8641f"/><ellipse cx="9" cy="33" rx="7" ry="10" fill="#b8641f"/><ellipse cx="2" cy="10" rx="21" ry="25" fill="url(#bekB)"/><path d="M-16,-12 Q4,-30 24,-8 Q28,6 18,14 Q16,-6 -16,-2Z" fill="#cf6a24"/><path d="M-14,-4 Q-26,8 -22,26" stroke="#c46a26" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="-22" cy="28" r="4" fill="#9a4f1a"/><ellipse cx="-8" cy="-24" rx="13" ry="12" fill="#c8641f"/><ellipse cx="-14" cy="-21" rx="8" ry="7" fill="#e3a283"/><path d="M-20,-24 Q-35,-22 -31,-8 Q-27,-1 -21,-8 Q-18,-14 -16,-20Z" fill="#ee9b7a" stroke="#b9694a" stroke-width="1.5"/><circle cx="-12" cy="-25" r="2" fill="#241711"/><path d="M-16,-29 q4,-3 8,0" stroke="#5a2f12" stroke-width="2" fill="none"/><circle cx="2" cy="-23" r="3" fill="#e3a283"/></g></g>`;
+const tree=(x,y,s)=>`<g class="d3" transform="translate(${x},${y}) scale(${s})"><rect x="-4" y="-26" width="8" height="28" rx="3" fill="url(#wood)"/><g class="sway"><circle cy="-38" r="18" fill="url(#leaf)"/><circle cx="-13" cy="-30" r="13" fill="url(#leaf)"/><circle cx="13" cy="-30" r="13" fill="url(#leaf)"/></g></g>`;
+const ilung=(x,y)=>`<g transform="translate(${x},${y})"><g class="flt"><ellipse rx="11" ry="5" fill="#3d9a4a"/><ellipse cx="-6" cy="-3" rx="6" ry="4" fill="#5cc060"/><ellipse cx="6" cy="-3" rx="6" ry="4" fill="#5cc060"/><circle cy="-8" r="3" fill="#b57bff"/></g></g>`;
+const fishS=(x,y)=>`<g transform="translate(${x},${y})"><g class="fish"><ellipse rx="9" ry="5" fill="#ffb347"/><path d="M-8,0 L-15,-5 L-15,5Z" fill="#ff8a3d"/><circle cx="4" cy="-1" r="1.3" fill="#222"/></g></g>`;
+const bird=(y,d)=>`<g transform="translate(0,${y})"><g class="bird" style="animation-delay:${d}s"><path d="M0,0 q8,-10 16,0 q8,-10 16,0" stroke="#3b4a66" stroke-width="3" fill="none" stroke-linecap="round"/></g></g>`;
+const vendor=(x,y,c)=>`<g transform="translate(${x},${y}) scale(.6)"><g class="hop"><path d="M-62,-6 Q-72,-14 -66,-20 L66,-20 Q72,-14 62,-6 Q0,16 -62,-6Z" fill="url(#wood)" stroke="#6b3a17" stroke-width="2"/><circle cx="-30" cy="-26" r="10" fill="${c}"/><circle cx="-14" cy="-26" r="10" fill="#ffd23f"/><circle cx="-22" cy="-38" r="10" fill="#ff8a3d"/><circle cx="25" cy="-24" r="14" fill="url(#skin)"/><path d="M5,-30 L25,-52 L45,-30Z" fill="#e8b85a" stroke="#a9792c"/><circle cx="20" cy="-24" r="2" fill="#222"/><circle cx="30" cy="-24" r="2" fill="#222"/><path d="M21,-18 q4,4 8,0" stroke="#7a2e2e" stroke-width="2" fill="none"/></g></g>`;
+const waves=(y,n)=>Array.from({length:n},(_,i)=>`<path class="wv" style="animation-delay:-${i}s" d="M-100,${y+i*22} ${'q25,-10 50,0 t50,0 '.repeat(20)}"/>`).join('');
+const scene=()=>`<svg viewBox="0 0 800 330" class="sc"><ellipse cx="120" cy="190" rx="260" ry="80" fill="#8fd67a"/><ellipse cx="700" cy="200" rx="260" ry="80" fill="#6cc16a"/>
+<rect y="185" width="800" height="150" fill="url(#wat)"/>${waves(205,5)}${tree(60,200,1.4)}${tree(130,195,1)}${tree(760,205,1.3)}${bek(690,200,1.1)}${bird(40,0)}${bird(80,-9)}
+${ilung(380,300)}${ilung(110,310)}${ilung(640,315)}${fishS(300,310)}
+<g class="d3" transform="translate(250,255) scale(1.35)">${boat('n')}</g><g class="d3" transform="translate(540,262) scale(1.35)">${boat('g')}</g></svg>`;
+/* ---------- AUDIO (musik orisinal bernuansa pentatonik Banjar, tanpa rekaman berhak cipta) ---------- */
+let AC,master,musG,noiseG,nt=0,st=0;
+const hz=n=>440*2**((n-9)/12);
+function initAudio(){if(AC){AC.resume();return}try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return}
+master=AC.createGain();master.gain.value=S.snd?1:0;master.connect(AC.destination);musG=AC.createGain();musG.gain.value=.55;musG.connect(master);
+const b=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+const n=AC.createBufferSource();n.buffer=b;n.loop=true;const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=450;noiseG=AC.createGain();noiseG.gain.value=0;n.connect(f);f.connect(noiseG);noiseG.connect(master);n.start()}
+function tone(f,t,d,ty='sine',v=.15,dest){const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(dest||master);o.start(t);o.stop(t+d+.05)}
+const SFX={click:[[16,0,.07,'square',.07],[21,.05,.09,'square',.07]],pick:[[12,0,.1],[16,.1,.1],[19,.2,.25]],good:[[12,0,.12],[16,.12,.12],[19,.24,.12],[24,.36,.35]],bad:[[7,0,.2,'triangle'],[3,.18,.3,'triangle']],arrive:[[19,0,.1,'square',.08],[19,.14,.1,'square',.08],[24,.28,.22,'square',.08]],win:[[12,0,.15],[16,.15,.15],[19,.3,.15],[24,.45,.15],[19,.6,.15],[24,.75,.15],[28,.9,.5],[31,1.1,.6]]};
+function sfx(k){if(!AC||!S.snd)return;const t=AC.currentTime;SFX[k].forEach(([n,d,l,ty,v])=>tone(hz(n),t+d,l,ty||'sine',v||.2))}
+const MEL=[7,9,12,9,7,4,7,null,9,12,14,12,9,7,9,null,12,14,16,14,12,9,7,9,4,7,9,7,4,2,0,null],BASS=[0,0,5,5,0,9,7,0];
+setInterval(()=>{if(!AC||!G||!G.run||G.paused||!S.mus||!S.snd)return;if(nt<AC.currentTime)nt=AC.currentTime+.05;
+while(nt<AC.currentTime+.4){const n=MEL[st%32];if(n!=null)tone(hz(n),nt,.55,'triangle',.1,musG);if(st%4==0)tone(hz(BASS[(st/4|0)%8]-12),nt,.7,'sine',.1,musG);if(st%2==1)tone(hz(24),nt,.05,'square',.012,musG);nt+=.27;st++}},120);
+function tSnd(){S.snd=!S.snd;$('#bs').textContent=S.snd?'🔊':'🔇';if(master)master.gain.value=S.snd?1:0}
+function tMus(){S.mus=!S.mus;$('#bm').style.opacity=S.mus?1:.5}
+document.addEventListener('click',e=>{const b=e.target.closest('.btn');if(b){initAudio();sfx('click')}});
+/* ---------- NAVIGASI ---------- */
+const stack=[];
+function go(id,push=true){const c=document.querySelector('.scr.on');if(push&&c&&c.id!=id)stack.push(c.id);document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id==id));scrollTo(0,0);if(id=='name')setTimeout(()=>$('#nm').focus(),60)}
+const back=()=>go(stack.pop()||'home',false);
+function home(){stack.length=0;stopGame();$('#fin').classList.remove('on');go('home',false)}
+function nameNext(){const v=$('#nm').value.trim();if(!v){$('#nerr').textContent='Ayo isi namamu dulu ya! 😊';$('#nm').focus();return}S.name=v;$('#nerr').textContent='';go('char')}
+$('#nm').addEventListener('keydown',e=>{if(e.key=='Enter')nameNext()});
+function pick(t){S.char=t;document.querySelectorAll('.pc').forEach(c=>c.classList.toggle('sel',c.dataset.t==t));$('#cn').disabled=false;initAudio();sfx('pick')}
+function helpStart(){if(!S.name)go('name');else if(!S.char)go('char');else startGame()}
+$('#hs').innerHTML=scene();$('#ns').innerHTML=scene().replace('class="sc"','class="sc" style="width:min(460px,86vw)"');
+$('#chs').innerHTML=[['n','Nanang','Si Teliti 🔍 Teliti, sabar, dan suka bertanya.'],['g','Galuh','Si Cerdas 💡 Ceria, cerdas, dan pantang menyerah.']].map(([t,n,d])=>`<div class="card pc" data-t="${t}" onclick="pick('${t}')"><span class="tk">✅</span><svg viewBox="-85 -100 170 120" width="100%"><rect x="-85" y="-10" width="170" height="40" fill="url(#wat)" opacity=".8"/>${boat(t)}</svg><h3>${n}</h3><p style="font-size:15px">${d}</p></div>`).join('');
+/* ---------- PERMAINAN ---------- */
+const PATH="M50,80 H790 C960,80 960,215 790,215 H210 C40,215 40,350 210,350 H790 C960,350 960,485 790,485 H240";
+let P,LEN,STOPS=[],OBS=[],face=1;
+const mz=$('#mz');
+function obstacle(i,x,y){const k=i%4;const sh=[`<ellipse rx="22" ry="15" fill="url(#rock)"/><ellipse cx="-7" cy="-6" rx="8" ry="4" fill="#fff" opacity=".45"/>`,`<g transform="rotate(-8)"><rect x="-30" y="-8" width="60" height="16" rx="8" fill="url(#wood)" stroke="#6b3a17"/><circle cx="30" cy="0" r="8" fill="#e8bd86" stroke="#6b3a17"/></g>`,`<g class="spin"><circle r="22" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="30 10"/><circle r="12" fill="none" stroke="#d9fbff" stroke-width="3" stroke-dasharray="14 8"/></g>`,`<ellipse cx="-12" rx="14" ry="7" fill="#3d9a4a"/><ellipse cx="10" cy="3" rx="14" ry="7" fill="#5cc060"/><circle cx="-4" cy="-6" r="3" fill="#b57bff"/>`][k];
+return `<g transform="translate(${x},${y})"><g id="ob${i}">${sh}<circle cy="-30" r="11" fill="#ff8a3d" stroke="#fff" stroke-width="2"/><text y="-25" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">${i+1}</text></g></g>`}
+function buildMaze(){let s=`<rect width="1000" height="580" fill="url(#grass)"/>
+<ellipse cx="130" cy="485" rx="140" ry="72" fill="#f3dca0"/><ellipse cx="130" cy="485" rx="130" ry="64" fill="url(#wat)"/>
+<path d="${PATH}" fill="none" stroke="#f3dca0" stroke-width="92" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="${PATH}" fill="none" stroke="url(#wat)" stroke-width="76" stroke-linecap="round"/>
+<path id="rp" d="${PATH}" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="5" stroke-dasharray="14 30" class="flow"/>
+<circle class="rip" cx="90" cy="470" r="22"/><circle class="rip" cx="170" cy="505" r="18" style="animation-delay:-1.5s"/>`;
+[[150,147],[270,147],[390,150],[640,147],[760,147],[300,282],[430,282],[560,282],[680,282],[340,417],[470,417],[600,417],[760,417]].forEach(([x,y],i)=>s+=tree(x,y+14,.9));
+s+=bek(520,170,.55)+bek(260,305,.55)+bek(700,440,.55);
+[[420,111],[650,246],[380,381],[560,516],[200,246],[880,115]].forEach(a=>s+=ilung(a[0],a[1]));
+s+=fishS(250,102)+fishS(450,238)+fishS(520,372)+fishS(400,508)+bird(30,0)+bird(55,-8)+bird(20,-15);
+s+=vendor(95,455,'#ff5d5d')+vendor(75,525,'#7ad34f')+vendor(175,520,'#ffd23f');
+s+=`<text x="130" y="418" text-anchor="middle" font-size="17" font-weight="800" fill="#fff" stroke="#e0701f" stroke-width="5" paint-order="stroke">PASAR TERAPUNG</text>
+<g transform="translate(50,80)"><rect x="-3" y="-50" width="6" height="40" fill="#8a5a2b"/><path d="M3,-50 h38 v20 h-38z" fill="#3fa84a"/><text x="22" y="-35" text-anchor="middle" font-size="10" font-weight="800" fill="#fff">START</text></g>
+<g transform="translate(240,485)"><rect x="-3" y="-55" width="6" height="45" fill="#8a5a2b"/><path d="M3,-55 h40 v22 h-40z" fill="#222"/><path d="M3,-55 h10 v11 h-10z M23,-55 h10 v11 h-10z M13,-44 h10 v11 h-10z M33,-44 h10 v11 h-10z" fill="#fff"/><text x="22" y="-18" text-anchor="middle" font-size="11" font-weight="800" fill="#e0484f" stroke="#fff" stroke-width="3" paint-order="stroke">FINISH</text></g>`;
+mz.innerHTML=s+'<g id="obs"></g><g id="bt"></g>';P=$('#rp');LEN=P.getTotalLength();
+STOPS=[];let o='';for(let i=0;i<20;i++){const l=(i+1)/21*LEN,q=P.getPointAtLength(Math.min(LEN,l+85));STOPS.push(l);o+=obstacle(i,q.x,q.y)}
+$('#obs').innerHTML=o;$('#bt').innerHTML=`<g id="boat" class="d3"><g id="bi">${boat(S.char)}</g></g>`;face=1;setBoat(0)}
+function setBoat(l){const p=P.getPointAtLength(l),q=P.getPointAtLength(Math.min(LEN,l+3));if(Math.abs(q.x-p.x)>.4)face=q.x<p.x?-1:1;$('#boat').setAttribute('transform',`translate(${p.x},${p.y-4}) scale(${.8*face},.8)`)}
+function newG(){const pp=shuffle(Array.from({length:20},(_,i)=>i%4));G={order:shuffle(QS.map((_,i)=>i)),pp,i:0,pos:0,v:0,moving:false,paused:false,run:false,fin:false,log:[],score:0,ok:0,bad:0,time:0,tries:0,locked:false}}
+function startGame(){initAudio();$('#fin').classList.remove('on');$('#pz').classList.remove('on');newG();buildMaze();$('#qp').style.display='none';$('#hn').textContent=(S.char=='n'?'👦 ':'👧 ')+S.name+' ('+(S.char=='n'?'Nanang':'Galuh')+')';hud();go('game',false);stack.length=0;stack.push('home');G.run=true;setTimeout(moveNext,700)}
+function stopGame(){if(G){G.run=false;G.moving=false}if(noiseG)noiseG.gain.value=0}
+function moveNext(){if(!G||!G.run)return;G.moving=true;G.v=0;$('#boat').classList.add('mv')}
+function hud(){$('#hs2').textContent='⭐ '+G.score;const s=G.time|0;$('#ht').textContent='⏱ '+String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');$('#hr').textContent='🚧 '+G.i+'/20';$('#pb').style.width=(G.i/20*100)+'%'}
+let last=0;
+function tick(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=ts;
+if(G&&G.run&&!G.paused){G.time+=dt;if(G.moving){const tg=G.i<20?STOPS[G.i]:LEN,d=tg-G.pos;G.v=Math.min(110,G.v+150*dt,Math.sqrt(2*150*Math.max(d,0))+6);G.pos=Math.min(tg,G.pos+G.v*dt);setBoat(G.pos);if(tg-G.pos<.5){G.pos=tg;setBoat(tg);G.moving=false;$('#boat').classList.remove('mv');arrive()}}hud()}
+if(noiseG)noiseG.gain.value=(G&&G.run&&G.moving&&!G.paused&&S.snd)?.07:0;requestAnimationFrame(tick)}
+requestAnimationFrame(tick);
+
+/* ---------- REKAP GURU ---------- */
+let REK=[];try{REK=JSON.parse(localStorage.getItem('jkRekap')||'[]')}catch(e){}
+const fmt=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function saveRec(){const t=G.ok+G.bad;REK.push({n:S.name,c:S.char=='n'?'Nanang':'Galuh',sc:G.score,ok:G.ok,bad:G.bad,pct:t?Math.round(G.ok/t*100):0,t:G.time|0,d:new Date().toLocaleString('id-ID',{dateStyle:'short',timeStyle:'short'}),l:G.log.map(x=>x.w)});try{localStorage.setItem('jkRekap',JSON.stringify(REK))}catch(e){}}
+function detHTML(l){return '<div class="dl">'+l.map((w,i)=>`<span class="${w?'w':'o'}">${i+1}. ${w?'⚠ '+w+'× salah':'✅ langsung benar'}</span>`).join('')+'</div>'}
+const sorted=()=>REK.map((r,i)=>({...r,i})).sort((x,y)=>y.sc-x.sc||x.t-y.t);
+function showRekap(){go('rekap');drawRek()}
+function drawRek(sel){const a=sorted();
+$('#rkt').innerHTML=a.length?'<table><tr><th>No</th><th>Nama</th><th>Karakter</th><th>Skor</th><th>Nilai</th><th>Benar</th><th>Salah</th><th>%</th><th>Durasi</th><th>Waktu main</th></tr>'+a.map((r,k)=>`<tr onclick="drawRek(${r.i})" class="${sel===r.i?'sl':''}"><td>${k+1}</td><td>${esc(r.n)}</td><td>${r.c}</td><td><b>${r.sc}</b></td><td><b>${Math.round(r.sc/2)}</b></td><td>${r.ok}</td><td>${r.bad}</td><td>${r.pct}%</td><td>${fmt(r.t)}</td><td>${r.d}</td></tr>`).join('')+'</table>':'<p style="font-weight:700">Belum ada siswa yang menyelesaikan permainan.</p>';
+$('#rkd').innerHTML=sel!=null&&REK[sel]?`<b>Rincian ${esc(REK[sel].n)}</b>`+detHTML(REK[sel].l):''}
+function copyRek(){const tx='No\tNama\tKarakter\tSkor\tNilai\tBenar\tSalah\t%\tDurasi\tWaktu\n'+sorted().map((r,k)=>[k+1,r.n,r.c,r.sc,Math.round(r.sc/2),r.ok,r.bad,r.pct,fmt(r.t),r.d].join('\t')).join('\n'),ta=$('#rkc');ta.value=tx;ta.style.display='block';ta.select();try{navigator.clipboard.writeText(tx)}catch(e){}}
+let dq=0;function delRek(){const b=$('#rkx');if(!dq){dq=1;b.textContent='⚠ YAKIN? TEKAN LAGI';setTimeout(()=>{dq=0;b.textContent='🗑 HAPUS DATA'},3000);return}REK=[];try{localStorage.removeItem('jkRekap')}catch(e){}dq=0;b.textContent='🗑 HAPUS DATA';drawRek()}
+function arrive(){if(G.i>=20){finish();return}sfx('arrive');showQ()}
+function showQ(){const q=QS[G.order[G.i]],cp=G.pp[G.i],oth=shuffle([1,2,3]);oth.splice(cp,0,0);G.opts=oth;G.tries=0;G.locked=false;G.q=q;
+$('#qp').innerHTML=`<div class="qn">🚧 Rintangan ${G.i+1} dari 20</div><div class="qt">${q[0]}</div><div class="opts">${oth.map((o,k)=>`<button class="opt" onclick="answer(${k},this)"><i>${'ABCD'[k]}</i>${q[1][o]}</button>`).join('')}</div><div id="fb"></div>`;$('#qp').style.display='block'}
+function answer(k,el){if(G.locked||G.paused)return;const fb=$('#fb'),[a,b]=G.q[2].split('|');
+if(G.opts[k]==0){G.locked=true;G.ok++;G.score+=G.tries==0?10:5;G.log[G.i]={w:G.tries};el.classList.add('ok');document.querySelectorAll('.opt').forEach(x=>x.style.pointerEvents='none');sfx('good');burst(14,['⭐','🌟','🎉']);const ob=$('#ob'+G.i);if(ob)ob.classList.add('gone');
+fb.className='ok';fb.innerHTML=`🎉 <b>Benar!</b> ${a}<br><b>${b}</b><br><br><button class="btn g s" onclick="cont()">SELANJUTNYA ➡</button>`;hud()}
+else{G.bad++;G.tries++;el.classList.add('no');sfx('bad');fb.className='no';fb.innerHTML=`💡 <b>Belum tepat, tidak apa-apa!</b> Ayo berpikir pelan-pelan. ${a}`;hud()}}
+function cont(){$('#qp').style.display='none';G.i++;hud();moveNext()}
+function pause(p){if(!G||!G.run)return;G.paused=p;$('#pz').classList.toggle('on',p)}
+function burst(n,em){const f=$('#fx');for(let i=0;i<n;i++){const s=document.createElement('span');s.textContent=em[i%em.length];s.style.left=Math.random()*100+'%';s.style.animationDelay=Math.random()*.6+'s';f.appendChild(s);setTimeout(()=>s.remove(),3000)}}
+function finish(){G.fin=true;G.run=false;saveRec();sfx('win');burst(40,['🎉','⭐','🎊','🌟']);$('#fin').classList.add('on')}
+function showResult(){$('#fin').classList.remove('on');const t=G.ok+G.bad,pct=t?Math.round(G.ok/t*100):0,s=G.time|0,
+tm=String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0'),stt=pct>=90?'Petualang Hebat 🏆':pct>=70?'Petualang Pintar 🌟':'Petualang Gigih 💪';
+$('#rmsg').innerHTML=`Hebat, ${esc(S.name)}! Kamu berhasil menyelesaikan Petualangan Jukung dan mengenal kegiatan ekonomi masyarakat Kalimantan Selatan! 🛶🎉`;
+const c=(bg,ic,l,v)=>`<div class="st" style="background:${bg}"><em>${ic}</em>${l}<big>${v}</big></div>`;
+$('#rst').innerHTML=c('linear-gradient(#5fa8ff,#3b6fe0)','🧒','Nama',esc(S.name))+c('linear-gradient(#ff8fb1,#e0508a)',S.char=='n'?'👦':'👧','Karakter',S.char=='n'?'Nanang':'Galuh')+c('linear-gradient(#ffc93c,#ff9a1f)','⭐','Total Skor',G.score)+c('linear-gradient(#ff7ab8,#d6409f)','📝','Nilai Akhir',Math.round(G.score/2))+c('linear-gradient(#8fe07a,#3fa84a)','✅','Soal Benar',G.ok+' / 20')+c('linear-gradient(#ff8a8a,#e0484f)','❌','Percobaan Salah',G.bad)+c('linear-gradient(#4fd6e8,#19a5bb)','⏱','Durasi',tm)+`<div class="st" style="background:linear-gradient(#b48cff,#7a4fd6)"><em>📊</em>Persentase Benar<div class="ring" style="background:conic-gradient(#ffc93c ${pct*3.6}deg,#ffffff55 0)"><b>${pct}%</b></div></div>`+c('linear-gradient(#ff9d5c,#e0701f)','🚩','Status','Selesai · '+stt);
+$('#rdet').innerHTML=detHTML(G.log.map(x=>x.w));go('result',false);burst(20,['⭐','🎉'])}
+</script></body></html>
